@@ -1,27 +1,25 @@
+name: Optimize resource pack
 on:
   push:
-    branches:
-    - main
-    - release/*
-            - name: PackSquash
-  # You may pin to the exact commit or the version.
-  # uses: ComunidadAylas/PackSquash-action@a9128decf6503efc143586d8eebbf52a861fcb6e
-  uses: ComunidadAylas/PackSquash-action@v4.0.3
-  with:
-    # The options to pass to PackSquash, either as a file path or as a TOML string. Relative paths are interpreted from the repository root. If not specified, PackSquash will optimize a pack in the repository root with the default options.
-    options: "main"
-    # The system identifier PackSquash will use to generate cryptographic secrets. Unless you know what you are doing, it is recommended to leave this parameter unset, as doing so will let the action generate and use a suitable system identifier automatically.
-    system_id: # optional, default is 
-    # The PackSquash version that the action will use. Please note that too old or too new versions may be incompatible with or not fully supported by the action.
-    packsquash_version: 
-    # The GitHub API authentication token that will be used for operations that may require authentication.
-    token: ${{ github.token }}
-    # The revision of the cache that the action uses internally. You should only need to change this revision if you want the action to not reuse any cached information, like the system identifier, or want to isolate jobs from each other due to undesired interferences between them. This will render any previously generated ZIP file unusable for speed optimizations unless you manage the system identifier yourself.
-    action_cache_revision: # optional, default is 
-    # The name of the workflow artifact containing the generated ZIP file that the action will upload. Later steps in the workflow will be able to download it by this name. Changing this may be needed in complex workflows, where the action runs several times.
-    artifact_name: Prototype
-    # If true, the action will instruct PackSquash to use emojis in the logs it generates, which look prettier. Otherwise, plain ASCII decoration characters will be used instead.
-    show_emoji_in_packsquash_logs: # optional, default is true
-    # If true, the action will instruct PackSquash to color the log messages it generates, which looks prettier. Otherwise, the messages will not be colored.
-    enable_color_in_packsquash_logs: # optional, default is true
-          
+    tags:
+      - '**'
+jobs:
+  packsquash:
+    name: Optimize resource pack
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # A non-shallow repository clone is required
+      - name: Run PackSquash
+        uses: ComunidadAylas/PackSquash-action@v4
+        with:
+          packsquash_version: latest
+          options: |
+            pack_directory = '.'
+            output_file_path = '/tmp/prototype.zip'
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: /tmp/prototype.zip
