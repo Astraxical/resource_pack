@@ -1,3 +1,3 @@
 # Admin Panel
 
-Status: [![Resource Pack Online](https://github.com/Astraxical/resource_pack/actions/workflows/Packsqash.yaml/badge.svg?branch=main&event=status)](https://github.com/Astraxical/resource_pack/actions/workflows/Packsqash.yaml)
+Status: [![Publish Resource Pack](https://github.com/Astraxical/resource_pack/actions/workflows/main.yml/badge.svg?event=check_run)](https://github.com/Astraxical/resource_pack/actions/workflows/main.yml)
